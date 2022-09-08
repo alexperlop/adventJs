@@ -1,41 +1,37 @@
-/*Para mejorar la productividad de la tienda en la que trabajamos, vamos a crear una pequeña máquina que calcula el mínimo número de monedas que debemos usar para dar el cambio de una compra en metálico.
+/*Este mes de diciembre hay películas super interesantes en el cine... y tengo que optimizar cómo gasto el dinero.
 
-Las monedas para cambio que puedes usar son estas:
+Mi cine favorito tiene dos posibilidades:
 
-coins[0] = 1 céntimo
-coins[1] = 2 céntimos
-coins[2] = 5 céntimos
-coins[3] = 10 céntimos
-coins[4] = 20 céntimos
-coins[5] = 50 céntimos
-Tenemos que crear una función que recibe el número de céntimos que hay que devolver al cliente y la función nos da un array con la combinación de monedas mínimas que debemos usar para conseguirlo.
+• Entrada de un sólo uso: Cuesta 12$ por cada película.
 
-getCoins(51) // [1, 0, 0, 0, 0, 1] -> una moneda de 1 céntimo y otra de 50 céntimos
-getCoins(3) // [1, 1, 0, 0, 0, 0] -> una moneda de 1 céntimo y otra de 2
-getCoins(5) // [0, 0, 1, 0, 0, 0] -> una moneda de 5 céntimos
-getCoins(16) // [1, 0, 1, 1, 0, 0] -> una moneda de 1 céntimo, una de 5 y una de 10
-getCoins(100) // [0, 0, 0, 0, 0, 2] -> dos monedas de 50 céntimos
-La dificultad del reto está en saber utilizar correctamente una estructura que te permita conocer las monedas que tienes disponible para crear el array con la devolución, ya que debes usar siempre el menor número de monedas posible. ¡Suerte 👩‍💻👨‍💻!.
+• Tarjeta de fidelidad: Cuesta 250$ pero que cada vez que vas pagas sólo el 75% del precio del ticket. ¡Lo mejor es que se acumula! Y cada vez que vas, se paga el 75% del precio del ticket que pagaste la última vez.
+Ejemplo de cada una al comprar 3 entradas y el precio que pagaría en total:
+
+// Entrada normal: 12$ * 3 = 36$
+// Tarjeta fidelidad: 250$ + (12$ * 0,75) +  (12$ * 0,75 * 0,75) + (12$ * 0,75 * 0,75 * 0,75) = 270,8125$
+Necesito una función que, al pasarle las veces que voy a ir al cine, me diga si vale la pena comprar la tarjeta fidelidad o no.
+
+shouldBuyFidelity(1) // false -> Mejor comprar tickets de un sólo uso
+shouldBuyFidelity(100) // true -> Mejor comprar tarjeta fidelidad
+La dificultad del reto está en encontrar una fórmula sencilla que nos diga el precio con descuento acumulado para la tarjeta fidelidad. 😜
 
 */
 
 
-const getCoins = (change) => {
-    let coins = [1, 2, 5, 10, 20, 50];
-    let coinsReturned = new Array(6).fill(0);
-    let more = true;
-    let i = 5;
-    while (more) {
-        if (change >= coins[i]) {
-            change = change - coins[i];
-            coinsReturned[i]++;
-        }
-        else if (i > 0) {
-            i--;
-        }
-        else {
-            more = false;
-        }
+const shouldBuyFidelity = (times) => {
+    let fidelityCard = 250;
+    let ticketPrice = 12;
+    let discount = 0.75;
+    let finalPrice = 0;
+    let ticket = 12;
+
+    for (let i = 0; i < times; i++) {
+        ticketPrice *= discount;
+        finalPrice += ticketPrice
     }
-    return coinsReturned;
+
+    fidelityCard += finalPrice;
+    ticket *= times;
+
+    return fidelityCard > ticket ? false : true;
 }
