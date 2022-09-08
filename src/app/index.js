@@ -24,16 +24,21 @@ __#__
 Ten en cuenta que el árbol es un string y necesitas los saltos de línea \n para cada línea para que se forme bien el árbol.*/
 
 
-const isValid = (letter) => {
-    if (letter.includes('()')) return false
-    const firstParentheses = letter.indexOf('(');
-    const lastParentheses = letter.lastIndexOf(')');
+const icreateXmasTree = (number) => {
+    const arbol = "*";
+    const space = ('_');
+    let tree = '';
 
-    if (firstParentheses === -1 || lastParentheses === -1) return false
-
-    const slicedLetter = letter.slice(firstParentheses, lastParentheses + 1);
-    const clearSpace = slicedLetter.trim();
-    if (clearSpace.match(/[a-zA-Z]+/g) === null || clearSpace.match(/[a-zA-Z]+/g) === 'undefined') return false
-    const filter = clearSpace.includes(('[' || ']')) || clearSpace.includes(('{' || '}'));
-    return filter === true ? false : true;
+    if (number >= 1 && number <= 100) {
+        for (let i = 1; i <= number; i++) {
+            if (i == 1) {
+                tree += space.repeat((number - 1)) + arbol + space.repeat((number - 1)) + '\n';
+            } else if (i > 1) {
+                tree += `${space.repeat((number - i))}${arbol.repeat((i + (i - 1)))}${space.repeat((number - i))}\n`;
+            }
+        }
+        let base = "_".repeat(number - 1) + "#" + "_".repeat(number - 1);
+        let response = tree.trim() + '\n' + base + '\n' + base;
+        return response
+    }
 }
