@@ -1,58 +1,47 @@
 /*
-En el taller de Santa 🎅 se están preparando los trineos de motor eléctrico para poder hacer la ruta perfecta para dejar los regalos.
+¡Hay demasiados regalos 🎁! Y envolverlos es una locura...
 
-La ruta empieza en el punto 0 y de ahí va hacia la derecha en línea recta.
+Vamos a crear una función que pasándole un array de regalos, nos devuelva otro array pero donde todos los regalos han sido envueltos con asteriscos tanto por arriba como por los lados.
 
-El Keanu Relfes 🧝 nos ha preparado una lista de obstáculos a evitar. El problema es que nos ha dado la lista de posiciones de los obstáculos desordenada... 😅 aunque al menos nunca la posición 0 puede tener un obstáculo.
+Sólo tienes que tener en cuenta unas cosillas ✌️:
 
-Encima, el trineo sólo se puede configurar para saltar un número fijo de posiciones... 😱
+Si el array está vacío, devuelve un array vacío
+Los regalos son emojis 🎁... por lo que tenlo en cuenta a la hora de contar su longitud...
+Por suerte, cada posición del array siempre tiene la misma longitud...
+wrapGifts(["📷", "⚽️"])
+/* Resultado:
+[ '****',
+  '*📷*',
+  '*⚽️*',
+  '****'
+]
 
-Necesitamos una función que nos diga la longitud mínima del salto del trineo para ir evitando todos los obstáculos en la ruta.
+wrapGifts(["🏈🎸", "🎮🧸"])
+/* Resultado:
+[ '******',
+  '*🏈🎸*',
+  '*🎮🧸*',
+  '******'
+]
 
-const obstacles = [5, 3, 6, 7, 9]
-getMinJump(obstacles) // -> 4
-
-// S es salto, X es obstáculo
-/* Así quedaría la representación:
-0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-.  .  .  X  .  X  X  X  .  X  . 
-S-----------S-----------S-------
-
-
-const obstacles = [2, 4, 6, 8, 10]
-getMinJump(obstacles) // -> 7
-
-/* Así quedaría la representación:
-0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-.  .  X  .  X  .  X  .  X  .  X 
-S--------------------S---------
-
-// Longitudes de salto:
-// 1 caería en el 2
-// 2 caería en el 2
-// 3 caería en el 6
-// 4 caería en el 4
-// 5 caería en el 10
-// 6 caería en el 6
-// 7 es el ideal!!! ✅
-
-getMinJump([1, 2, 3, 5]) // -> 4
-getMinJump([3, 7, 5]) // -> 2
-getMinJump([9, 5, 1]) // -> 2
-
-La dificultad del reto está en pensar que sólo podemos configurar el salto del trineo una vez y que buscamos el salto mínimo que nos serviría para sortear todos los obstaculos.
+wrapGifts(["📷"])
+/* Resultado:
+[ '****',
+  '*📷*',
+  '****'
+]
 */
 
 
-const getMinJump = (obstacles) => {
-    let minJump = 1;
-    obstacles.sort((a, b) => { a - b })
-
-    for (let i = 0; i <= Math.max(...obstacles); i += minJump) {
-        if (obstacles.includes(i)) {
-            minJump += 1;
-            i = 0;
-        }
+const wrapGifts = (gifts) => {
+    if (!gifts) {
+        return []
+    } else {
+        let wrapper = '*';
+        gifts.unshift(wrapper.repeat(gifts[1] ? gifts[1].length : gifts[0].length))
+        gifts.push(wrapper.repeat(gifts[1] ? gifts[1].length : gifts[0].length))
+        return gifts.map(item => {
+            return wrapper + item + wrapper;
+        })
     }
-    return minJump;
 }
