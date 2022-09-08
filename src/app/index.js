@@ -18,22 +18,7 @@ const pricesDoge = [18, 15, 12, 11, 9, 7]
 maxProfit(pricesDoge) = // -> -1 (no hay ganancia posible)
 
 const pricesAda = [3, 3, 3, 3, 3]
-maxProfit(pricesAda) = // -> -1 (no hay ganancia posible)
-Enviar solución
-Completado por 1299 usuarios
-91011121314158716653421
-                  minValue = Math.min(...prices);
-        indxOfmaxValue = prices.indexOf(maxValue);
-                indxOfminValue = prices.lastIndexOf(minValue);
-        if(indxOfmaxValue == 0 && indxOfminValue == prices.length -1){
-          return profit = -1
-        }else{
-          return profit = maxValue - minValue;
-        }
-      }else{
-        return profit = maxValue - minValue;
-
-*/
+maxProfit(pricesAda) = // -> -1 (no hay ganancia posible)*/
 
 
 const maxProfit = (prices) => {
