@@ -1,24 +1,27 @@
-/*El Grinch está abriendo las cartas que iban a Santa Claus y las está dejando hechas un lío. 😱
+/*¡Es hora de poner el árbol de navidad en casa! 🎄
 
-Las cartas son una cadena de texto que incluyen regalos y paréntesis ().
+Para ello vamos a crear una función que recibe la altura del árbol, que será un entero positivo del 1 a, como máximo, 100.
 
-Para saber si una carta es válida ✅, debes comprobar que los paréntesis cierran correctamente y que, además, no vayan vacíos.
+Si le pasamos el argumento 5, se pintaría esto:
 
-¡Pero ojo! Porque el Grinch ha dejado llaves { y corchetes [ dentro de los paréntesis que hacen que no sean válidas. Por suerte sólo los ha dejado en medio de los paréntesis...
+____*____
+___***___
+__*****__
+_*******_
+*********
+____#____
+____#____
+Creamos un triángulo de asteriscos * con la altura proporcionada y, a los lados, usamos el guión bajo _ para los espacios. Es muy importante que nuestro árbol siempre tenga la misma longitud por cada lado.
+Todos los árboles, por pequeños o grandes que sean, tienen un tronco de dos líneas de #.
 
-Ejemplos:
+Otro ejemplo con un árbol de altura 3:
 
-"bici coche (balón) bici coche peluche" // -> ✅
-"(muñeca) consola bici" // ✅
-
-"bici coche (balón bici coche" // -> ❌
-"peluche (bici [coche) bici coche balón" // -> ❌
-"(peluche {) bici" // -> ❌
-"() bici" // ❌
-      
-Crea una función que pasándole el texto de la carta, devuelva true si es válida y false si no lo es. ¡Y acaba con la travesura del Grinch!
-
-*/
+__*__
+_***_
+*****
+__#__
+__#__
+Ten en cuenta que el árbol es un string y necesitas los saltos de línea \n para cada línea para que se forme bien el árbol.*/
 
 
 const isValid = (letter) => {
