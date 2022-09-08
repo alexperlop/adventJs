@@ -1,45 +1,44 @@
-/*Invertir en criptomonedas es casi un deporte de riesgo. El otro día hackearon Bitmart y ha hecho que el valor de Bitcoin, y otras monedas, bajase un 25%.
+/*En la fábrica de Papa Noél 🎅 se acerca el día especial... y todavía tenemos un montón de cosas por contar. 😅
 
-Vamos a escribir una función que reciba la lista de precios de una criptomoneda en un día y debemos devolver la ganancia máxima que podríamos sacar si compramos y vendemos la inversión el mismo día.
+Por suerte a Mark Zucktheelf 🧝 se le ha ocurrido crear una función que permita agrupar un array, que puede ser de valores u objetos, a través de una función o de una propiedad.
 
-La lista de precios es un array de números y representa el tiempo de izquierda a derecha. Por lo que ten en cuenta que no puedes comprar a un precio que esté a la derecha de la venta y no puedes vender a un precio que esté a la izquierda de la compra.
+Nos trae un montón de ejemplos:
 
-Por ejemplo:
+groupBy([6.1, 4.2, 6.3], Math.floor) // { 6: [6.1, 6.3], 4: [4.2] }
+groupBy(['one', 'two', 'three'], 'length') // { 3: ['one', 'two'], 5: ['three'] }
+groupBy([{age: 23}, {age: 24}], 'age') // { 23: [{age: 23}], 24: [{age: 24}] }
 
-const pricesBtc = [39, 18, 29, 25, 34, 32, 5]
-maxProfit(pricesBtc) // -> 16 (compra a 18, vende a 34)
+groupBy(
+  [1397639141184, 1363223700000],
+  timestamp => new Date(timestamp).getFullYear()
+)
+// { 2013: [1363223700000], 2014: [1397639141184] }
 
-const pricesEth = [10, 20, 30, 40, 50, 60, 70]  
-maxProfit(pricesEth) // -> 60 (compra a 10, vende a 70)
-    
-Si ese día no se puede sacar ningún beneficio, tenemos que devolver -1 para evitar que hagamos una locura:
+groupBy([
+  { title: 'JavaScript: The Good Parts', rating: 8 },
+  { title: 'Aprendiendo Git', rating: 10 },
+  { title: 'Clean Code', rating: 9 },
+], 'rating')
+// { 8: [{ title: 'JavaScript: The Good Parts', rating: 8 }],
+//   9: [{ title: 'Clean Code', rating: 9 }],
+//   10: [{ title: 'Aprendiendo Git', rating: 10 }] }
+Como ves, la función groupBy recibe una colección (array) y una función o una propiedad, y devuelve un objeto con claves que son los valores de la función ejecutada pasando como argumento cada elemento o de la propiedad por cada elemento. Luego los valores son un array de los valores que tengan la misma llave.
 
-const pricesDoge = [18, 15, 12, 11, 9, 7]
-maxProfit(pricesDoge) = // -> -1 (no hay ganancia posible)
-
-const pricesAda = [3, 3, 3, 3, 3]
-maxProfit(pricesAda) = // -> -1 (no hay ganancia posible)*/
+La dificultad del reto está más en comprender la función que en la implementación. ¡Suerte!.*/
 
 
-const maxProfit = (prices) => {
-    let maxValue = Math.max(...prices);
-    let minValue = Math.min(...prices);
-    let indxOfmaxValue = prices.indexOf(maxValue);
-    let indxOfminValue = prices.lastIndexOf(minValue);
-    let profit;
-    if (indxOfmaxValue == 0 && indxOfminValue == prices.length - 1) {
-        prices.splice(indxOfmaxValue, 1)
-        prices.splice(indxOfminValue - 1, 1)
-        maxValue = Math.max(...prices);
-        minValue = Math.min(...prices);
-        indxOfmaxValue = prices.indexOf(maxValue);
-        indxOfminValue = prices.lastIndexOf(minValue);
-        if (indxOfmaxValue == 0 && indxOfminValue == prices.length - 1) {
-            return profit = -1
-        } else {
-            return profit = maxValue - minValue;
+const groupBy = (collection, it) => {
+    let obj = {};
+    collection.forEach(element => {
+        const property = typeof it === 'function' ? it(element) : element[it];
+        if (obj[property] === undefined) {
+            let array = [];
+            array.push(element);
+            obj[property] = array;
         }
-    } else {
-        return profit = maxValue - minValue;
-    }
+        else {
+            obj[property].push(element);
+        }
+    });
+    return obj;
 }
