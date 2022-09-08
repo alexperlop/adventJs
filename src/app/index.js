@@ -1,37 +1,58 @@
-/*Este mes de diciembre hay películas super interesantes en el cine... y tengo que optimizar cómo gasto el dinero.
+/*
+En el taller de Santa 🎅 se están preparando los trineos de motor eléctrico para poder hacer la ruta perfecta para dejar los regalos.
 
-Mi cine favorito tiene dos posibilidades:
+La ruta empieza en el punto 0 y de ahí va hacia la derecha en línea recta.
 
-• Entrada de un sólo uso: Cuesta 12$ por cada película.
+El Keanu Relfes 🧝 nos ha preparado una lista de obstáculos a evitar. El problema es que nos ha dado la lista de posiciones de los obstáculos desordenada... 😅 aunque al menos nunca la posición 0 puede tener un obstáculo.
 
-• Tarjeta de fidelidad: Cuesta 250$ pero que cada vez que vas pagas sólo el 75% del precio del ticket. ¡Lo mejor es que se acumula! Y cada vez que vas, se paga el 75% del precio del ticket que pagaste la última vez.
-Ejemplo de cada una al comprar 3 entradas y el precio que pagaría en total:
+Encima, el trineo sólo se puede configurar para saltar un número fijo de posiciones... 😱
 
-// Entrada normal: 12$ * 3 = 36$
-// Tarjeta fidelidad: 250$ + (12$ * 0,75) +  (12$ * 0,75 * 0,75) + (12$ * 0,75 * 0,75 * 0,75) = 270,8125$
-Necesito una función que, al pasarle las veces que voy a ir al cine, me diga si vale la pena comprar la tarjeta fidelidad o no.
+Necesitamos una función que nos diga la longitud mínima del salto del trineo para ir evitando todos los obstáculos en la ruta.
 
-shouldBuyFidelity(1) // false -> Mejor comprar tickets de un sólo uso
-shouldBuyFidelity(100) // true -> Mejor comprar tarjeta fidelidad
-La dificultad del reto está en encontrar una fórmula sencilla que nos diga el precio con descuento acumulado para la tarjeta fidelidad. 😜
+const obstacles = [5, 3, 6, 7, 9]
+getMinJump(obstacles) // -> 4
 
+// S es salto, X es obstáculo
+/* Así quedaría la representación:
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+.  .  .  X  .  X  X  X  .  X  . 
+S-----------S-----------S-------
+
+
+const obstacles = [2, 4, 6, 8, 10]
+getMinJump(obstacles) // -> 7
+
+/* Así quedaría la representación:
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+.  .  X  .  X  .  X  .  X  .  X 
+S--------------------S---------
+
+// Longitudes de salto:
+// 1 caería en el 2
+// 2 caería en el 2
+// 3 caería en el 6
+// 4 caería en el 4
+// 5 caería en el 10
+// 6 caería en el 6
+// 7 es el ideal!!! ✅
+
+getMinJump([1, 2, 3, 5]) // -> 4
+getMinJump([3, 7, 5]) // -> 2
+getMinJump([9, 5, 1]) // -> 2
+
+La dificultad del reto está en pensar que sólo podemos configurar el salto del trineo una vez y que buscamos el salto mínimo que nos serviría para sortear todos los obstaculos.
 */
 
 
-const shouldBuyFidelity = (times) => {
-    let fidelityCard = 250;
-    let ticketPrice = 12;
-    let discount = 0.75;
-    let finalPrice = 0;
-    let ticket = 12;
+const getMinJump = (obstacles) => {
+    let minJump = 1;
+    obstacles.sort((a, b) => { a - b })
 
-    for (let i = 0; i < times; i++) {
-        ticketPrice *= discount;
-        finalPrice += ticketPrice
+    for (let i = 0; i <= Math.max(...obstacles); i += minJump) {
+        if (obstacles.includes(i)) {
+            minJump += 1;
+            i = 0;
+        }
     }
-
-    fidelityCard += finalPrice;
-    ticket *= times;
-
-    return fidelityCard > ticket ? false : true;
+    return minJump;
 }
