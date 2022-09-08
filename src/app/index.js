@@ -1,47 +1,43 @@
-/*
-¡Hay demasiados regalos 🎁! Y envolverlos es una locura...
+/*¡Hemos perdido a un reno y falta poco más de una semana para Navidad! 😱
 
-Vamos a crear una función que pasándole un array de regalos, nos devuelva otro array pero donde todos los regalos han sido envueltos con asteriscos tanto por arriba como por los lados.
+Lo peor es que son tantos que no sabemos cuál es el que nos falta... ¡Qué lío! A ver, Elfon Musk ha hecho inventario y nos pasa un array con los ids de cada reno.
 
-Sólo tienes que tener en cuenta unas cosillas ✌️:
+👍 Lo bueno: los ids son números que pueden ir del 0 al 100, no están repetidos y sólo se ha perdido un reno.
 
-Si el array está vacío, devuelve un array vacío
-Los regalos son emojis 🎁... por lo que tenlo en cuenta a la hora de contar su longitud...
-Por suerte, cada posición del array siempre tiene la misma longitud...
-wrapGifts(["📷", "⚽️"])
-/* Resultado:
-[ '****',
-  '*📷*',
-  '*⚽️*',
-  '****'
-]
+👎 Lo malo: la lista está desordenada y podría faltar el último...
 
-wrapGifts(["🏈🎸", "🎮🧸"])
-/* Resultado:
-[ '******',
-  '*🏈🎸*',
-  '*🎮🧸*',
-  '******'
-]
+Necesitamos una función que al pasarle la lista de ids de renos nos diga inmediatamente cuál es el que falta:
 
-wrapGifts(["📷"])
-/* Resultado:
-[ '****',
-  '*📷*',
-  '****'
-]
+missingReindeer([0, 2, 3]) // -> 1
+missingReindeer([5, 6, 1, 2, 3, 7, 0]) // -> 4
+missingReindeer([0, 1]) // -> 2 (¡es el último el que falta!)
+missingReindeer([3, 0, 1]) // -> 2
+missingReindeer([9, 2, 3, 5, 6, 4, 7, 0, 1]) // -> 8
+missingReindeer([0]) // -> 1 (¡es el último el que falta!)
+Parece fácil con una complejidad de O(n)... ¿crees que podrías hacerlo mejor?
 */
 
 
-const wrapGifts = (gifts) => {
-    if (!gifts) {
-        return []
-    } else {
-        let wrapper = '*';
-        gifts.unshift(wrapper.repeat(gifts[1] ? gifts[1].length : gifts[0].length))
-        gifts.push(wrapper.repeat(gifts[1] ? gifts[1].length : gifts[0].length))
-        return gifts.map(item => {
-            return wrapper + item + wrapper;
-        })
+const missingReindeer = (ids) => {
+    ids.sort((a, b) => {
+        if (a == b) {
+            return 0;
+        }
+        if (a < b) {
+            return -1;
+        }
+        return 1;
+    })
+
+    for (let i = 0; i <= Math.max(...ids); i++) {
+        if (!ids.includes(i)) {
+            return ids = i
+        }
     }
+
+    if (typeof (ids) === 'object') {
+        ids = ids.length;
+    }
+
+    return ids
 }
