@@ -1,33 +1,51 @@
-/*Antes de poder disfrutar de la navidad... nos toca terminar de rematar los exámenes finales. ¡Y toca un poco de matemáticas! 😱
+/*Mi amigo Dani está trabajando en una tienda y con la llegada de las navidades tiene el almacén hecho un desastre y no encuentra nada.
 
-A una función se le pasan dos parámetros: un Array con números y el resultado que se espera.
+Vamos a crear una función contains que recibe dos parámetros: un objeto que define el almacén y el producto que buscamos.
 
-La función debe devolver los dos valores del Array que sumen el resultado esperado. Como a veces pueden haber más de dos valores que sumen, se devolverá el primero empezando por la izquierda que encuentre otro par, sin importar lo lejos que esté a la derecha.
+La función debe devolver un booleano que indique si se encuentra el string como valor en algún nivel del objeto. Veamos unos ejemplos:
 
-Si no se encuentra, se devuelve null.
+const almacen = {
+  'estanteria1': {
+    'cajon1': {
+      'producto1': 'coca-cola',
+      'producto2': 'fanta',
+      'producto3': 'sprite'
+    }
+  },
+  'estanteria2': {
+    'cajon1': 'vacio',
+    'cajon2': {
+      'producto1': 'pantalones',
+      'producto2': 'camiseta' // <- ¡Está aquí!
+    }
+  }
+}
+            
+contains(almacen, 'camiseta') // true
 
-Veamos unos ejemplos:
+const otroAlmacen = {
+  'baul': {
+    'fondo': {
+      'objeto': 'cd-rom',
+      'otro-objeto': 'disquette',
+      'otra-cosa': 'mando'
+    }
+  }
+}
+  
+contains(otroAlmacen, 'gameboy') // false
+Ten en cuenta que la tienda es enorme. Tiene diferentes almacenes y, como has visto en los ejemplos, cada uno puede tener diferentes organizaciones.Lo importante es buscar que el producto está en los almacenes.*/
 
-sumPairs([3, 5, 7, 2], 10) // [3, 7]
-sumPairs([-3, -2, 7, -5], 10) // null
-sumPairs([2, 2, 3, 1], 4) // [2, 2]
-sumPairs([6, 7, 1, 2], 8) // [6, 2]
-sumPairs([0, 2, 2, 3, -1, 1, 5], 6) // [1, 5]
-El resultado tiene que ser un array con dos números.
 
-Una vez que tengas el resultado... ¿cómo podrías hacer que fuese lo más óptimo posible para no tener que recorrer las mismas situaciones dos veces 🤔?*/
-
-
-const sumPairs = (numbers, result) => {
-    let finalResult = null;
-    let sumResult;
-    numbers.forEach((currentNum, index) => {
-        numbers.forEach((nextNum, i) => {
-            currentNum == nextNum && numbers.indexOf(currentNum) == numbers.lastIndexOf(nextNum) ? sumResult = null : sumResult = currentNum + nextNum;
-            if (sumResult == result) {
-                finalResult == null ? finalResult = [currentNum, nextNum] : '';
-            }
-        })
+const contains = (store, product) => {
+    let result = false;
+    const storeArray = Object.keys(store);
+    storeArray.map((shelf, i) => {
+        if (typeof store[shelf] === 'object') {
+            result = contains(store[shelf], product);
+        } else {
+            Object.values(store).includes(product) ? result = true : result = false
+        }
     })
-    return finalResult
+    return result;
 }
