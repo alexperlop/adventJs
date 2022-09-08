@@ -1,45 +1,41 @@
-/*Invertir en criptomonedas es casi un deporte de riesgo. El otro día hackearon Bitmart y ha hecho que el valor de Bitcoin, y otras monedas, bajase un 25%.
+/*Para mejorar la productividad de la tienda en la que trabajamos, vamos a crear una pequeña máquina que calcula el mínimo número de monedas que debemos usar para dar el cambio de una compra en metálico.
 
-Vamos a escribir una función que reciba la lista de precios de una criptomoneda en un día y debemos devolver la ganancia máxima que podríamos sacar si compramos y vendemos la inversión el mismo día.
+Las monedas para cambio que puedes usar son estas:
 
-La lista de precios es un array de números y representa el tiempo de izquierda a derecha. Por lo que ten en cuenta que no puedes comprar a un precio que esté a la derecha de la venta y no puedes vender a un precio que esté a la izquierda de la compra.
+coins[0] = 1 céntimo
+coins[1] = 2 céntimos
+coins[2] = 5 céntimos
+coins[3] = 10 céntimos
+coins[4] = 20 céntimos
+coins[5] = 50 céntimos
+Tenemos que crear una función que recibe el número de céntimos que hay que devolver al cliente y la función nos da un array con la combinación de monedas mínimas que debemos usar para conseguirlo.
 
-Por ejemplo:
+getCoins(51) // [1, 0, 0, 0, 0, 1] -> una moneda de 1 céntimo y otra de 50 céntimos
+getCoins(3) // [1, 1, 0, 0, 0, 0] -> una moneda de 1 céntimo y otra de 2
+getCoins(5) // [0, 0, 1, 0, 0, 0] -> una moneda de 5 céntimos
+getCoins(16) // [1, 0, 1, 1, 0, 0] -> una moneda de 1 céntimo, una de 5 y una de 10
+getCoins(100) // [0, 0, 0, 0, 0, 2] -> dos monedas de 50 céntimos
+La dificultad del reto está en saber utilizar correctamente una estructura que te permita conocer las monedas que tienes disponible para crear el array con la devolución, ya que debes usar siempre el menor número de monedas posible. ¡Suerte 👩‍💻👨‍💻!.
 
-const pricesBtc = [39, 18, 29, 25, 34, 32, 5]
-maxProfit(pricesBtc) // -> 16 (compra a 18, vende a 34)
-
-const pricesEth = [10, 20, 30, 40, 50, 60, 70]  
-maxProfit(pricesEth) // -> 60 (compra a 10, vende a 70)
-    
-Si ese día no se puede sacar ningún beneficio, tenemos que devolver -1 para evitar que hagamos una locura:
-
-const pricesDoge = [18, 15, 12, 11, 9, 7]
-maxProfit(pricesDoge) = // -> -1 (no hay ganancia posible)
-
-const pricesAda = [3, 3, 3, 3, 3]
-maxProfit(pricesAda) = // -> -1 (no hay ganancia posible)*/
+*/
 
 
-const maxProfit = (prices) => {
-    let maxValue = Math.max(...prices);
-    let minValue = Math.min(...prices);
-    let indxOfmaxValue = prices.indexOf(maxValue);
-    let indxOfminValue = prices.lastIndexOf(minValue);
-    let profit;
-    if (indxOfmaxValue == 0 && indxOfminValue == prices.length - 1) {
-        prices.splice(indxOfmaxValue, 1)
-        prices.splice(indxOfminValue - 1, 1)
-        maxValue = Math.max(...prices);
-        minValue = Math.min(...prices);
-        indxOfmaxValue = prices.indexOf(maxValue);
-        indxOfminValue = prices.lastIndexOf(minValue);
-        if (indxOfmaxValue == 0 && indxOfminValue == prices.length - 1) {
-            return profit = -1
-        } else {
-            return profit = maxValue - minValue;
+const getCoins = (change) => {
+    let coins = [1, 2, 5, 10, 20, 50];
+    let coinsReturned = new Array(6).fill(0);
+    let more = true;
+    let i = 5;
+    while (more) {
+        if (change >= coins[i]) {
+            change = change - coins[i];
+            coinsReturned[i]++;
         }
-    } else {
-        return profit = maxValue - minValue;
+        else if (i > 0) {
+            i--;
+        }
+        else {
+            more = false;
+        }
     }
+    return coinsReturned;
 }
