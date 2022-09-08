@@ -1,62 +1,33 @@
-/*Con la emoción, ya estamos empezando a contar los días del calendario hasta el 25 de diciembre 📆.
+/*Antes de poder disfrutar de la navidad... nos toca terminar de rematar los exámenes finales. ¡Y toca un poco de matemáticas! 😱
 
-Para ayudar a esto, vamos a crear una función que pasándole una instancia de Date nos diga el número de días que faltan.
+A una función se le pasan dos parámetros: un Array con números y el resultado que se espera.
+
+La función debe devolver los dos valores del Array que sumen el resultado esperado. Como a veces pueden haber más de dos valores que sumen, se devolverá el primero empezando por la izquierda que encuentre otro par, sin importar lo lejos que esté a la derecha.
+
+Si no se encuentra, se devuelve null.
 
 Veamos unos ejemplos:
 
-const date1 = new Date('Dec 1, 2021')
-daysToXmas(date1) // 24
-const date2 = new Date('Dec 24, 2021 00:00:01')
-daysToXmas(date2) // 1
-const date3 = new Date('Dec 24, 2021 23:59:59')
-daysToXmas(date3) // 1
-const date4 = new Date("December 20, 2021 03:24:00")
-daysToXmas(date4) // 5
-El resultado tiene que ser un número entero y, como ves, aunque falte un segundo hasta el siguiente día, se entiende que todavía falta un día.
+sumPairs([3, 5, 7, 2], 10) // [3, 7]
+sumPairs([-3, -2, 7, -5], 10) // null
+sumPairs([2, 2, 3, 1], 4) // [2, 2]
+sumPairs([6, 7, 1, 2], 8) // [6, 2]
+sumPairs([0, 2, 2, 3, -1, 1, 5], 6) // [1, 5]
+El resultado tiene que ser un array con dos números.
 
-¡Pero ojo! También hay que indicar si la fecha es del mismo día (devolveríamos 0) o si es una fecha futura (devolveríamos el número de días en negativo -):
-
-const date = new Date('Dec 25, 2021')
-daysToXmas(date) // 0
-const date1 = new Date('Dec 26, 2021')
-daysToXmas(date1) // -1
-const date2 = new Date('Dec 31, 2021')
-daysToXmas(date2) // -6
-const date3 = new Date('Jan 1, 2022 00:00:01')
-daysToXmas(date3) // -7
-const date4 = new Date('Jan 1, 2022 23:59:59')
-daysToXmas(date4) // -7
-Por cierto, la fecha de referencia para saber si es 25 de diciembre es Dec 25, 2021.*/
+Una vez que tengas el resultado... ¿cómo podrías hacer que fuese lo más óptimo posible para no tener que recorrer las mismas situaciones dos veces 🤔?*/
 
 
-const daysToXmas = (date) => {
-    const Xmas = new Date('Dec 25, 2021');
-    const XmasMonth = Xmas.getMonth();
-    const XmasDay = Xmas.getDate();
-    const XmasYear = Xmas.getFullYear();
-
-    const month = date.getMonth();
-    const day = date.getDate();
-    const year = date.getFullYear();
-    const monthLeft = XmasMonth - month;
-    const daysLeft = XmasDay - day;
-    const dayOfDec = 31;
-    let fecha;
-
-    if (XmasYear < year) {
-        fecha = ((dayOfDec - XmasDay) + day) * -1;
-    }
-
-    if ((XmasYear == year) && (XmasMonth == month && XmasDay < day)) {
-        fecha = daysLeft;
-    }
-
-    if (XmasYear == year) {
-        if (monthLeft == 0) {
-            fecha = daysLeft;
-        } else {
-            fecha = { daysLeft, monthLeft }
-        }
-    }
-    return fecha;
+const sumPairs = (numbers, result) => {
+    let finalResult = null;
+    let sumResult;
+    numbers.forEach((currentNum, index) => {
+        numbers.forEach((nextNum, i) => {
+            currentNum == nextNum && numbers.indexOf(currentNum) == numbers.lastIndexOf(nextNum) ? sumResult = null : sumResult = currentNum + nextNum;
+            if (sumResult == result) {
+                finalResult == null ? finalResult = [currentNum, nextNum] : '';
+            }
+        })
+    })
+    return finalResult
 }
