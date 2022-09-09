@@ -1,43 +1,35 @@
-/*¡Hemos perdido a un reno y falta poco más de una semana para Navidad! 😱
+/*¡¡Estamos haciendo los últimos ajustes para el trineo de Santa Claus!
 
-Lo peor es que son tantos que no sabemos cuál es el que nos falta... ¡Qué lío! A ver, Elfon Musk ha hecho inventario y nos pasa un array con los ids de cada reno.
+Como ya sabes, el trineo es volador y estamos ajustando el motor para que haga parabolas lo más óptimas posibles. Para esto el salto debe ser siempre hacia arriba y, a partir del punto más alto, debe bajar siempre hacia abajo...
 
-👍 Lo bueno: los ids son números que pueden ir del 0 al 100, no están repetidos y sólo se ha perdido un reno.
+Nuestro mecánico de confianza, Kiko Belfs, que tiene un Tesla genial, nos ha explicado que los saltos se pueden ver como arrays... y que sólo tenemos que asegurarnos que los números suben y bajan de forma correcta. También nos avisa que sólo pasaremos arrays de, como mínimo, tres posiciones.
 
-👎 Lo malo: la lista está desordenada y podría faltar el último...
+Nos ha pasado algunos ejemplos de cómo debería ser nuestra función y algunos resultados:
 
-Necesitamos una función que al pasarle la lista de ids de renos nos diga inmediatamente cuál es el que falta:
+checkSledJump([1, 2, 3, 2, 1]) // true: sube y baja de forma estricta
+checkSledJump([0, 1, 0]) // -> true: sube y baja de forma estricta
+checkSledJump([0, 3, 2, 1]) // -> true: sube y baja de forma estricta
+checkSledJump([0, 1000, 1]) // -> true: sube y baja de forma estricta
 
-missingReindeer([0, 2, 3]) // -> 1
-missingReindeer([5, 6, 1, 2, 3, 7, 0]) // -> 4
-missingReindeer([0, 1]) // -> 2 (¡es el último el que falta!)
-missingReindeer([3, 0, 1]) // -> 2
-missingReindeer([9, 2, 3, 5, 6, 4, 7, 0, 1]) // -> 8
-missingReindeer([0]) // -> 1 (¡es el último el que falta!)
-Parece fácil con una complejidad de O(n)... ¿crees que podrías hacerlo mejor?
+checkSledJump([2, 4, 4, 6, 2]) // false: no sube de forma estricta
+checkSledJump([1, 2, 3]) // false: sólo sube
+checkSledJump([1, 2, 3, 2, 1, 2, 3]) // false: sube y baja y sube... ¡no vale!
+Lo importante: recorrer el array de izquierda a derecha para ver que la subida es siempre estricta, detectar el punto más alto y entonces ver que la bajada es estricta hacia abajo...
 */
 
 
-const missingReindeer = (ids) => {
-    ids.sort((a, b) => {
-        if (a == b) {
-            return 0;
-        }
-        if (a < b) {
-            return -1;
-        }
-        return 1;
-    })
-
-    for (let i = 0; i <= Math.max(...ids); i++) {
-        if (!ids.includes(i)) {
-            return ids = i
+const checkSledJump = (heights) => {
+    let array = [];
+    for (let i = 0; i < heights.length; i++) {
+        if (heights[i] < heights[i + 1]) {
+            array.push(1)
+        } else if (heights[i] > heights[i + 1]) {
+            array.push(1)
+        } else if (heights[i] == heights.at(-1) && heights[i] < heights[i - 1]) {
+            array.push(1)
+        } else {
+            array.push(0)
         }
     }
-
-    if (typeof (ids) === 'object') {
-        ids = ids.length;
-    }
-
-    return ids
+    return array.includes(0) ? false : true;
 }
