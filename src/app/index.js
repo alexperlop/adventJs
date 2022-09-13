@@ -1,35 +1,74 @@
-/*¡¡Estamos haciendo los últimos ajustes para el trineo de Santa Claus!
+/*Lara Eloft ha encontrado unos restos élficos en una cueva, cerca del Círculo Polar Ártico, a 8 km al norte de Rovaniemi.
 
-Como ya sabes, el trineo es volador y estamos ajustando el motor para que haga parabolas lo más óptimas posibles. Para esto el salto debe ser siempre hacia arriba y, a partir del punto más alto, debe bajar siempre hacia abajo...
+Ahora se encuentra descifrando unas misteriosas cartas que contiene información sobre unos números que le puede hacer llegar al próximo objetivo.
 
-Nuestro mecánico de confianza, Kiko Belfs, que tiene un Tesla genial, nos ha explicado que los saltos se pueden ver como arrays... y que sólo tenemos que asegurarnos que los números suben y bajan de forma correcta. También nos avisa que sólo pasaremos arrays de, como mínimo, tres posiciones.
+Lara tiene un documento que contiene una serie de números que pueden ser usados para descifrarlos:
 
-Nos ha pasado algunos ejemplos de cómo debería ser nuestra función y algunos resultados:
+Símbolo       Valor
+  .             1
+  ,             5
+  :             10
+  ;             50
+  !             100
+Lara, además, ha notado una cosa. Los símbolos se restan si están inmediatamente a la izquierda de otro mayor. 😱
 
-checkSledJump([1, 2, 3, 2, 1]) // true: sube y baja de forma estricta
-checkSledJump([0, 1, 0]) // -> true: sube y baja de forma estricta
-checkSledJump([0, 3, 2, 1]) // -> true: sube y baja de forma estricta
-checkSledJump([0, 1000, 1]) // -> true: sube y baja de forma estricta
+Tenemos que crear una función que nos pasa una cadena de texto con símbolos y tenemos que transformarlo al número correcto. ¡Ojo! Si encuentras un símbolo que no entendemos, mejor que devolvamos un NaN:
 
-checkSledJump([2, 4, 4, 6, 2]) // false: no sube de forma estricta
-checkSledJump([1, 2, 3]) // false: sólo sube
-checkSledJump([1, 2, 3, 2, 1, 2, 3]) // false: sube y baja y sube... ¡no vale!
-Lo importante: recorrer el array de izquierda a derecha para ver que la subida es siempre estricta, detectar el punto más alto y entonces ver que la bajada es estricta hacia abajo...
+decodeNumbers('...') // 3
+decodeNumbers('.,') // 4 (5 - 1)
+decodeNumbers(',.') // 6 (5 + 1)
+decodeNumbers(',...') // 8 (5 + 3)
+decodeNumbers('.........!') // 107 (1 + 1 + 1 + 1 + 1 + 1 + 1 - 1 + 100)
+decodeNumbers('.;') // 49 (50 - 1)
+decodeNumbers('..,') // 5 (-1 + 1 + 5)
+decodeNumbers('..,!') // 95 (1 - 1 - 5 + 100)
+decodeNumbers('.;!') // 49 (-1 -50 + 100)
+decodeNumbers('!!!') // 300
+decodeNumbers(';!') // 50
+decodeNumbers(';.W') // NaN
 */
 
 
-const checkSledJump = (heights) => {
+const decodeNumber = (symbols) => {
+    const code = ['.', ',', ':', ';', '!'];
+    symbols = symbols.split('');
+    let includes;
+    let obj = {
+        answer: true
+    };
+    let result = 0;
+    let initValue = 1;
     let array = [];
-    for (let i = 0; i < heights.length; i++) {
-        if (heights[i] < heights[i + 1]) {
-            array.push(1)
-        } else if (heights[i] > heights[i + 1]) {
-            array.push(1)
-        } else if (heights[i] == heights.at(-1) && heights[i] < heights[i - 1]) {
-            array.push(1)
-        } else {
-            array.push(0)
+    symbols.map((value) => {
+        includes = code.includes(value);
+        if (!includes) {
+            obj.answer = +value;
         }
-    }
-    return array.includes(0) ? false : true;
+    })
+
+    if (!obj.answer) return obj.answer;
+
+    code.forEach((item, i) => {
+        if (i == 0) {
+            obj[item] = initValue
+        } else if (i % 2 == 0) {
+            initValue *= 2
+            obj[item] = initValue
+        } else {
+            initValue *= 5
+            obj[item] = initValue
+        }
+    })
+
+    symbols.forEach((item, i) => {
+        array.push(obj[item])
+    })
+    array.forEach((el, i) => {
+        if (el < array[i + 1]) {
+            el = -array[i]
+        }
+        result += el;
+    })
+
+    return result
 }
