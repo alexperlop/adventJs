@@ -1,74 +1,53 @@
-/*Lara Eloft ha encontrado unos restos élficos en una cueva, cerca del Círculo Polar Ártico, a 8 km al norte de Rovaniemi.
+/*Las empresas de paquetería 📦 se preparan para la época de fiestas y la locura de envíos que les espera.
 
-Ahora se encuentra descifrando unas misteriosas cartas que contiene información sobre unos números que le puede hacer llegar al próximo objetivo.
+La empresa funciona con flotas de furgonetas 🚛 y camiones 🚚. Las flotas tienen un organigrama, ya que existen rangos de nivel de experiencia.
 
-Lara tiene un documento que contiene una serie de números que pueden ser usados para descifrarlos:
+Necesitamos saber el número de paquetes que una persona va a poder gestionar en un día. Para ello se cuenta el número de paquetes que puede llevar esa persona y todos los transportistas que tiene en su equipo. Lo malo es que los datos están almacenados de una forma un poco rara en un array:
 
-Símbolo       Valor
-  .             1
-  ,             5
-  :             10
-  ;             50
-  !             100
-Lara, además, ha notado una cosa. Los símbolos se restan si están inmediatamente a la izquierda de otro mayor. 😱
+El array contiene otros arrays que contienen los datos de cada transportista
+transportista[0] -> Nombre/ID del Transportista
+transportista[1] -> Paquetes que gestiona en un día
+transportista[2] -> Array con sus subordinados
 
-Tenemos que crear una función que nos pasa una cadena de texto con símbolos y tenemos que transformarlo al número correcto. ¡Ojo! Si encuentras un símbolo que no entendemos, mejor que devolvamos un NaN:
+Para que lo veamos en código, tanto el array, como la función de dos parámetros para conseguir el número deseado:
 
-decodeNumbers('...') // 3
-decodeNumbers('.,') // 4 (5 - 1)
-decodeNumbers(',.') // 6 (5 + 1)
-decodeNumbers(',...') // 8 (5 + 3)
-decodeNumbers('.........!') // 107 (1 + 1 + 1 + 1 + 1 + 1 + 1 - 1 + 100)
-decodeNumbers('.;') // 49 (50 - 1)
-decodeNumbers('..,') // 5 (-1 + 1 + 5)
-decodeNumbers('..,!') // 95 (1 - 1 - 5 + 100)
-decodeNumbers('.;!') // 49 (-1 -50 + 100)
-decodeNumbers('!!!') // 300
-decodeNumbers(';!') // 50
-decodeNumbers(';.W') // NaN
+const carriers = [
+  ['dapelu', 5, ['midu', 'jelowing']],
+  ['midu', 2, []],
+  ['jelowing', 2, []]
+]
+
+countPackages(carriers, 'dapelu') // 9
+// 5 de dapelu, 2 de midu y 2 de jelowing = 9
+
+const carriers2 = [
+  ['lolivier', 8, ['camila', 'jesuspoleo']],
+  ['camila', 5, ['sergiomartinez', 'conchaasensio']],
+  ['jesuspoleo', 4, []],
+  ['sergiomartinez', 4, []],
+  ['conchaasensio', 3, ['facundocapua', 'faviola']],
+  ['facundocapua', 2, []],
+  ['faviola', 1, []]
+]
+
+countPackages(carriers2, 'camila') // 15
+// 5 de camila, 4 de sergiomartinez, 3 de conchaasensio, 2 de facundocapua y 1 de faviola = 15
+¡Ten cuidado! Como has visto en el segundo ejemplo, el organigrama puede tener diferentes niveles y además nos viene información que puede ser que no necesitemos. Debemos tener en cuenta el parámetro de carrierID para calcular bien el número y contar todo su equipo.
 */
 
 
-const decodeNumber = (symbols) => {
-    const code = ['.', ',', ':', ';', '!'];
-    symbols = symbols.split('');
-    let includes;
-    let obj = {
-        answer: true
-    };
-    let result = 0;
-    let initValue = 1;
-    let array = [];
-    symbols.map((value) => {
-        includes = code.includes(value);
-        if (!includes) {
-            obj.answer = +value;
+const countPackages = (carriers, carrierID) => {
+
+    let packages = 0
+    const findCarrier = (listOfCarriers, idCarrier, pack) => {
+        let [name, box, subs] = listOfCarriers.find((item) => item[0] === idCarrier);
+        if (subs.length) {
+            for (let i = 0; i < subs.length; i++) {
+                pack = findCarrier(carriers, subs[i], pack)
+            }
         }
-    })
+        return pack += box;
+    }
 
-    if (!obj.answer) return obj.answer;
-
-    code.forEach((item, i) => {
-        if (i == 0) {
-            obj[item] = initValue
-        } else if (i % 2 == 0) {
-            initValue *= 2
-            obj[item] = initValue
-        } else {
-            initValue *= 5
-            obj[item] = initValue
-        }
-    })
-
-    symbols.forEach((item, i) => {
-        array.push(obj[item])
-    })
-    array.forEach((el, i) => {
-        if (el < array[i + 1]) {
-            el = -array[i]
-        }
-        result += el;
-    })
-
-    return result
+    return findCarrier(carriers, carrierID, packages);
 }
