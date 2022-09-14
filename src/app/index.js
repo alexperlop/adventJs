@@ -1,41 +1,26 @@
-/*Con motivo de las fechas más bonitas del año, en Platzi han lanzado una promoción muy especial porque la educación es un regalo 🎁 para siempre.
+/*En la clase de español del pueblo de Laponia han creado un reto a la hora de escribir la carta a Papa Noél 🎅: la carta ✉️ tiene que contener todas las letras del alfabeto.
 
-En Platzi tienen más de 800 cursos 📚 pero, claro, nuestro tiempo es limitado. Así que vamos a optimizar nuestro tiempo disponible para completar dos cursos usando el máximo número de horas disponible.
+Desde el taller de Santa 🎅 se han enterado y quieren escribir una función que les diga si realmente la cadena de texto que les llega tiene, efectivamente, todas las letras del abecedario español 🔎.
 
-Tenemos que crear una función que recibe dos parámetros. El primero es el número de horas que tenemos disponible ⏳ y el segundo es un array donde cada índice es un curso y el valor el tiempo que se tarda en completar.
+Hay que tener en cuenta las letras en mayúscula y que las letras con acento y diéresis se consideran iguales. Por ejemplo la á y la ä cuenta como una a.
 
-Tenemos claro que queremos hacer dos cursos así que la función debe devolver un array con el índice de los dos cursos que vamos a poder completar con el tiempo disponible proporcionado y usando el máximo tiempo disponible. Si no nos da tiempo, devolvemos null
+Vamos a ver unos ejemplos de frases:
 
-Vamos a ver unos ejemplos:
+pangram('Extraño pan de col y kiwi se quemó bajo fugaz vaho') // true
+pangram('Jovencillo emponzoñado y con walkman: ¡qué figurota exhibes!') // true
 
-learn(10, [2, 3, 8, 1, 4]) // [0, 2] -> con 10 horas disponibles lo mejor es que completemos los cursos en el índice 0 y 2.
-
-learn(15, [2, 10, 4, 1]) // [1, 2] -> Los cursos en [1, 2] son 14 horas, es la mejor opción.
-
-learn(25, [10, 15, 20, 5]) // [0, 1] -> los cursos [0, 1] y [2, 3] completan exactamente con 25 horas pero siempre devolvemos el primero que encontremos
-
-learn(8, [8, 2, 1]) // [1, 2] -> para hacer dos cursos, no podemos hacer el de 8 horas, así que devolvemos el de 1 y 2.
-
-learn(8, [8, 2, 1, 4, 3]) // [3, 4] -> usamos el máximo tiempo disponible así que [3, 4] usa 7 horas y el [1, 2] sólo usaría 3 horas.
-
-learn(4, [10, 14, 20]) // null -> no nos da tiempo a hacer dos cursos
-
-learn(5, [5, 5, 5]) // null -> no nos da tiempo a hacer dos cursos
-Mirando todo el tema de Platzi, además nos hemos dado cuenta que tienen un descuento especial para Navidad. ¿No sabes qué regalar? Regala conocimiento 🎓.
+pangram('Esto es una frase larga pero no tiene todas las letras del abecedario') // false
+pangram('De la a a la z, nos faltan letras') // false
+Y ya que estás... ¿Cuál es tu pangrama favorito? ¡Compártelo en nuestra comunidad de Discord!
 */
 
 
-const learn = (time, courses) => {
-    let newArray = null;
-    let maxValue = 0;
-    for (let i = 0; i < courses.length; i++) {
-        for (let j = i + 1; j < courses.length; j++) {
-            const initialVal = courses[i] + courses[j];
-            if (initialVal <= time && initialVal > maxValue) {
-                maxValue = initialVal;
-                newArray = [i, j];
-            }
-        }
+const pangram = (letter) => {
+    letter = letter.toLowerCase().split('').filter(el => el !== ' ');
+    const alphabet = 'abcdefghijklmnñopqrstuvwxyz';
+    let count = 0;
+    for (let i = 0; i < alphabet.split('').length; i++) {
+        letter.includes(alphabet[i]) && count++
     }
-    return newArray;
+    return count === alphabet.length
 }
