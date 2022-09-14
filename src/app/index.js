@@ -1,53 +1,29 @@
-/*Las empresas de paquetería 📦 se preparan para la época de fiestas y la locura de envíos que les espera.
+/*Evelyn Belefzin 👩‍💻 está trabajando en un sistema operativo para ser usado en el taller de Santa Claus 🎅.
 
-La empresa funciona con flotas de furgonetas 🚛 y camiones 🚚. Las flotas tienen un organigrama, ya que existen rangos de nivel de experiencia.
+Se ha dado cuenta que en el taller nadie le presta atención a los nombres de los ficheros y a veces intentan guardar el mismo fichero más de una vez... así que es importante que gestionemos bien los nombres duplicados.
 
-Necesitamos saber el número de paquetes que una persona va a poder gestionar en un día. Para ello se cuenta el número de paquetes que puede llevar esa persona y todos los transportistas que tiene en su equipo. Lo malo es que los datos están almacenados de una forma un poco rara en un array:
+Tenemos que crear una función que al pasarnos un array de nombres de archivo devolvamos un array con el mismo número de elementos pero donde los nombres que se repetían se anexe al final (k) donde k sería el número de veces que se encontró repetido.
 
-El array contiene otros arrays que contienen los datos de cada transportista
-transportista[0] -> Nombre/ID del Transportista
-transportista[1] -> Paquetes que gestiona en un día
-transportista[2] -> Array con sus subordinados
+Lo mejor es que veamos un ejemplo:
 
-Para que lo veamos en código, tanto el array, como la función de dos parámetros para conseguir el número deseado:
+const files = ['photo', 'postcard', 'photo', 'photo', 'video']
+fixFiles(files) // ['photo', 'postcard', 'photo(1)', 'photo(2)', 'video']
 
-const carriers = [
-  ['dapelu', 5, ['midu', 'jelowing']],
-  ['midu', 2, []],
-  ['jelowing', 2, []]
-]
+const files2 = ['file', 'file', 'file', 'game', 'game']
+fixFiles(files2) = ['file', 'file(1)', 'file(2)', 'game', 'game(1)']
 
-countPackages(carriers, 'dapelu') // 9
-// 5 de dapelu, 2 de midu y 2 de jelowing = 9
-
-const carriers2 = [
-  ['lolivier', 8, ['camila', 'jesuspoleo']],
-  ['camila', 5, ['sergiomartinez', 'conchaasensio']],
-  ['jesuspoleo', 4, []],
-  ['sergiomartinez', 4, []],
-  ['conchaasensio', 3, ['facundocapua', 'faviola']],
-  ['facundocapua', 2, []],
-  ['faviola', 1, []]
-]
-
-countPackages(carriers2, 'camila') // 15
-// 5 de camila, 4 de sergiomartinez, 3 de conchaasensio, 2 de facundocapua y 1 de faviola = 15
-¡Ten cuidado! Como has visto en el segundo ejemplo, el organigrama puede tener diferentes niveles y además nos viene información que puede ser que no necesitemos. Debemos tener en cuenta el parámetro de carrierID para calcular bien el número y contar todo su equipo.
+// ojo que los elfos ya tenían archivos con (1)... ¡y pueden estar repetidos!
+const files3 = ['file', 'file(1)', 'icon', 'icon(1)', 'icon(1)']
+fixFiles(files3) // ['file', 'file(1)', 'icon', 'icon(1)', 'icon(1)(1)']
+Por cierto, nos han dicho que son Agile y usan Scrum. Por eso quieren saber cuánto tiempo vas a tardar para saber cuándo van a poder usarlo. Que hay prisa. 😝 Así que entra a Discord y cuéntanos.
 */
 
 
-const countPackages = (carriers, carrierID) => {
-
-    let packages = 0
-    const findCarrier = (listOfCarriers, idCarrier, pack) => {
-        let [name, box, subs] = listOfCarriers.find((item) => item[0] === idCarrier);
-        if (subs.length) {
-            for (let i = 0; i < subs.length; i++) {
-                pack = findCarrier(carriers, subs[i], pack)
-            }
-        }
-        return pack += box;
-    }
-
-    return findCarrier(carriers, carrierID, packages);
+const fixFiles = (files) => {
+    let counter = {};
+    return files.map((file) => {
+        counter[file] = ++counter[file] || 0;
+        console.log(counter)
+        return counter[file] > 0 ? `${file}(${counter[file]})` : file;
+    })
 }
