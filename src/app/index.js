@@ -1,29 +1,41 @@
-/*Evelyn Belefzin 👩‍💻 está trabajando en un sistema operativo para ser usado en el taller de Santa Claus 🎅.
+/*Con motivo de las fechas más bonitas del año, en Platzi han lanzado una promoción muy especial porque la educación es un regalo 🎁 para siempre.
 
-Se ha dado cuenta que en el taller nadie le presta atención a los nombres de los ficheros y a veces intentan guardar el mismo fichero más de una vez... así que es importante que gestionemos bien los nombres duplicados.
+En Platzi tienen más de 800 cursos 📚 pero, claro, nuestro tiempo es limitado. Así que vamos a optimizar nuestro tiempo disponible para completar dos cursos usando el máximo número de horas disponible.
 
-Tenemos que crear una función que al pasarnos un array de nombres de archivo devolvamos un array con el mismo número de elementos pero donde los nombres que se repetían se anexe al final (k) donde k sería el número de veces que se encontró repetido.
+Tenemos que crear una función que recibe dos parámetros. El primero es el número de horas que tenemos disponible ⏳ y el segundo es un array donde cada índice es un curso y el valor el tiempo que se tarda en completar.
 
-Lo mejor es que veamos un ejemplo:
+Tenemos claro que queremos hacer dos cursos así que la función debe devolver un array con el índice de los dos cursos que vamos a poder completar con el tiempo disponible proporcionado y usando el máximo tiempo disponible. Si no nos da tiempo, devolvemos null
 
-const files = ['photo', 'postcard', 'photo', 'photo', 'video']
-fixFiles(files) // ['photo', 'postcard', 'photo(1)', 'photo(2)', 'video']
+Vamos a ver unos ejemplos:
 
-const files2 = ['file', 'file', 'file', 'game', 'game']
-fixFiles(files2) = ['file', 'file(1)', 'file(2)', 'game', 'game(1)']
+learn(10, [2, 3, 8, 1, 4]) // [0, 2] -> con 10 horas disponibles lo mejor es que completemos los cursos en el índice 0 y 2.
 
-// ojo que los elfos ya tenían archivos con (1)... ¡y pueden estar repetidos!
-const files3 = ['file', 'file(1)', 'icon', 'icon(1)', 'icon(1)']
-fixFiles(files3) // ['file', 'file(1)', 'icon', 'icon(1)', 'icon(1)(1)']
-Por cierto, nos han dicho que son Agile y usan Scrum. Por eso quieren saber cuánto tiempo vas a tardar para saber cuándo van a poder usarlo. Que hay prisa. 😝 Así que entra a Discord y cuéntanos.
+learn(15, [2, 10, 4, 1]) // [1, 2] -> Los cursos en [1, 2] son 14 horas, es la mejor opción.
+
+learn(25, [10, 15, 20, 5]) // [0, 1] -> los cursos [0, 1] y [2, 3] completan exactamente con 25 horas pero siempre devolvemos el primero que encontremos
+
+learn(8, [8, 2, 1]) // [1, 2] -> para hacer dos cursos, no podemos hacer el de 8 horas, así que devolvemos el de 1 y 2.
+
+learn(8, [8, 2, 1, 4, 3]) // [3, 4] -> usamos el máximo tiempo disponible así que [3, 4] usa 7 horas y el [1, 2] sólo usaría 3 horas.
+
+learn(4, [10, 14, 20]) // null -> no nos da tiempo a hacer dos cursos
+
+learn(5, [5, 5, 5]) // null -> no nos da tiempo a hacer dos cursos
+Mirando todo el tema de Platzi, además nos hemos dado cuenta que tienen un descuento especial para Navidad. ¿No sabes qué regalar? Regala conocimiento 🎓.
 */
 
 
-const fixFiles = (files) => {
-    let counter = {};
-    return files.map((file) => {
-        counter[file] = ++counter[file] || 0;
-        console.log(counter)
-        return counter[file] > 0 ? `${file}(${counter[file]})` : file;
-    })
+const learn = (time, courses) => {
+    let newArray = null;
+    let maxValue = 0;
+    for (let i = 0; i < courses.length; i++) {
+        for (let j = i + 1; j < courses.length; j++) {
+            const initialVal = courses[i] + courses[j];
+            if (initialVal <= time && initialVal > maxValue) {
+                maxValue = initialVal;
+                newArray = [i, j];
+            }
+        }
+    }
+    return newArray;
 }
