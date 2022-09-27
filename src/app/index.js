@@ -1,41 +1,55 @@
-/*Con motivo de las fechas más bonitas del año, en Platzi han lanzado una promoción muy especial porque la educación es un regalo 🎁 para siempre.
+/*Se están preparando las rutas para el trineo de Santa 🎅. Tenemos almacenes por todo el mundo para que Santa pueda recoger los regalos y entregarlos en el destino final. 🎁
 
-En Platzi tienen más de 800 cursos 📚 pero, claro, nuestro tiempo es limitado. Así que vamos a optimizar nuestro tiempo disponible para completar dos cursos usando el máximo número de horas disponible.
+Necesitamos saber si las rutas que estamos creando tienen sentido o si Santa va a tener que dejar tirados regalos por el camino. 🥺
 
-Tenemos que crear una función que recibe dos parámetros. El primero es el número de horas que tenemos disponible ⏳ y el segundo es un array donde cada índice es un curso y el valor el tiempo que se tarda en completar.
+Para eso vamos a crear una función que recibe dos parámetros:
 
-Tenemos claro que queremos hacer dos cursos así que la función debe devolver un array con el índice de los dos cursos que vamos a poder completar con el tiempo disponible proporcionado y usando el máximo tiempo disponible. Si no nos da tiempo, devolvemos null
+Un número con la capacidad máxima de regalos en el trineo.
+El viaje que es un array de arrays. Cada subarray contiene tres números que representan:
+trip[0] = número de regalos a transportar
+trip[1] = punto de recogida de los regalos
+trip[2] = punto de entrega de los regalos
+La ruta siempre va de izquierda a derecha (nunca volverá Santa hacia atrás) pero... ¡ten en cuenta que en mitad de la ruta puede tener que recoger regalos cuando ya tiene alguno encima!
 
-Vamos a ver unos ejemplos:
+Lo mejor es que veamos un ejemplo:
 
-learn(10, [2, 3, 8, 1, 4]) // [0, 2] -> con 10 horas disponibles lo mejor es que completemos los cursos en el índice 0 y 2.
+canCarry(4, [[2, 5, 8], [3, 6, 10]]) // false
+// En el punto 5 recoge 2 regalos...
+// En el punto 6 recoge 3 regalos...
+// Del punto 6 al 8 tendría 5 regalos en total
+// Y su capacidad es 4... así que ¡no podría!
 
-learn(15, [2, 10, 4, 1]) // [1, 2] -> Los cursos en [1, 2] son 14 horas, es la mejor opción.
+canCarry(3, [[1, 1, 5], [2, 2, 10]]) // true
+// En el punto 1 recoge 1 regalo...
+// En el punto 2 recoge 2 regalos...
+// En el punto 5 entrega 1 regalo...
+// En el punto 10 entrega 2 regalos...
+// ¡Sí puede! Nunca superó la carga máxima de 3 regalos
 
-learn(25, [10, 15, 20, 5]) // [0, 1] -> los cursos [0, 1] y [2, 3] completan exactamente con 25 horas pero siempre devolvemos el primero que encontremos
+canCarry(3, [[2, 1, 5],[3, 5, 7]]) // true -> nunca supera el máximo de capacidad
+canCarry(4, [[2, 3, 8],[2, 5, 7]]) // true -> del punto 5 al 7 lleva 4 regalos y no supera el máximo
 
-learn(8, [8, 2, 1]) // [1, 2] -> para hacer dos cursos, no podemos hacer el de 8 horas, así que devolvemos el de 1 y 2.
-
-learn(8, [8, 2, 1, 4, 3]) // [3, 4] -> usamos el máximo tiempo disponible así que [3, 4] usa 7 horas y el [1, 2] sólo usaría 3 horas.
-
-learn(4, [10, 14, 20]) // null -> no nos da tiempo a hacer dos cursos
-
-learn(5, [5, 5, 5]) // null -> no nos da tiempo a hacer dos cursos
-Mirando todo el tema de Platzi, además nos hemos dado cuenta que tienen un descuento especial para Navidad. ¿No sabes qué regalar? Regala conocimiento 🎓.
+canCarry(1, [[2, 3, 8]]) // false -> no podría ni con el primer viaje
+canCarry(2, [[1, 2, 4], [2, 3, 8]]) // false -> del punto 3 al 4 supera la capacidad máxima porque llevaría 3 regalos
+Lo difícil, e importante, es que entiendas que Santa Claus va entregando y recogiendo regalos y que a veces eso puede hacer que supere la carga máxima.
 */
 
 
-const learn = (time, courses) => {
-    let newArray = null;
-    let maxValue = 0;
-    for (let i = 0; i < courses.length; i++) {
-        for (let j = i + 1; j < courses.length; j++) {
-            const initialVal = courses[i] + courses[j];
-            if (initialVal <= time && initialVal > maxValue) {
-                maxValue = initialVal;
-                newArray = [i, j];
-            }
-        }
+const canCarry = (capacity, trip) => {
+    let points = [];
+    let sum = 0;
+
+    for (let i = 0; i < trip.length; i++) {
+        points.push([trip[i][1], trip[i][0]]);
+        points.push([trip[i][2], -trip[i][0]]);
     }
-    return newArray;
+
+    points.sort((a, b) => a[0] - b[0]);
+
+    for (let i = 0; i < points.length; i++) {
+        sum += points[i][1];
+        if (sum > capacity) return false;
+    }
+
+    return true;
 }
